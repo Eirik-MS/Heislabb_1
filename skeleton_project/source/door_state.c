@@ -43,5 +43,5 @@ void close_door(){
 }
 
 door_state get_door_state(){
-    
+    return door_state;
 }
