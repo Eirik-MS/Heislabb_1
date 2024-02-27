@@ -1,5 +1,8 @@
 #include "hardware.h"
 #include "door_state.h"
+#include "lift_state.h"
+
+#include <stdio.h>
 
 
 static door_state_t door_state;
@@ -22,7 +25,7 @@ void open_door(){
         hardware_command_door_open(1);
     }
     else{
-        print("cannot open doors. Lift is in undifined state");
+        printf("cannot open doors. Lift is in undifined state");
     }
 }
 void close_door(){
@@ -30,7 +33,7 @@ void close_door(){
         hardware_command_door_open(0);
     }
     else{
-        print("cannot close doors. Door blocked");
+        printf("cannot close doors. Door blocked");
     }
 }
 

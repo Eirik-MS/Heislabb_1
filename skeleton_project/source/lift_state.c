@@ -54,13 +54,22 @@ lift_state_t get_lift_state(){
 }
 
 bool set_lift_direction(direction_t direction){
-    switch (direction)
+    switch (lift_state.direction)
     {
-    case /* constant-expression */:
+    case STATIONARY:
         /* code */
         break;
-    
+    case MOVEING_UP:
+        //Code
+        break;
+    case MOVEING_DOWN:
+        //code
+        break;
+    case EMERGENCY_STOP:
+        //code
+        break;
     default:
         break;
     }
+    return 0;
 }
