@@ -1,16 +1,8 @@
 #include "hardware.h"
-#include "channels.h"
-#include "io.h"
 #include "door_state.h"
 
-#include <stdlib.h>
 
-static enum door_state{
-    door_closed,
-    door_open,
-    door_blocked
-
-};
+static door_state_t door_state;
 
 void door_init(){
     door_state = door_open;
@@ -42,6 +34,6 @@ void close_door(){
     }
 }
 
-door_state get_door_state(){
+door_state_t get_door_state(){
     return door_state;
 }
