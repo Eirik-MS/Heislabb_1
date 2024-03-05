@@ -2,15 +2,13 @@
 
 
 #define N_FLOORS 4
+#define N_BUTTONS 3
 
 typedef enum { 
     DIRN_DOWN   = -1,
     DIRN_STOP   = 0,
     DIRN_UP     = 1
 } MotorDirection;
-
-
-#define N_BUTTONS 3
 
 typedef enum { 
     BUTTON_HALL_UP      = 0,
