@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "door_state.h": "c",
+        "elevio.h": "c",
+        "order_handler.h": "c"
+    }
+}

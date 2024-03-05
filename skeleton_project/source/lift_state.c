@@ -1,6 +1,6 @@
 
 #include "lift_state.h"
-#include "hardware.h"
+#include "driver/elevio.h"
 #include <stdbool.h>
 
 static lift_state_t lift_state = {
@@ -10,43 +10,38 @@ static lift_state_t lift_state = {
 };
 
 void lift_state_init(){
-    for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
-        if(hardware_read_floor_sensor(i)){
-            lift_state.current_floor = i;
+    if(elevio_floorSensor()==-1){
+        while (elevio_floorSensor()==-1)
+        {
+            elevio_motorDirection(DIRN_UP);
         }
+        elevio_motorDirection(DIRN_STOP);
+        lift_state.current_floor=elevio_floorSensor();
+        elevio_floorIndicator(lift_state.current_floor);
     }
+
     //TODO: See for the case when the elevator is above fourth floor
     //TODO: Fix case when the elevator starts with obstruction and between floors
 
-    if (lift_state.current_floor == -1){ 
-        hardware_command_movement(HARDWARE_MOVEMENT_UP);
-        lift_state.direction = MOVEING_UP;
-        while (lift_state.current_floor == -1){
-            for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
-                hardware_read_floor_sensor(i) ? lift_state.current_floor = i : -1;
-            }
-        }
-        hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-    }
-
-    hardware_command_floor_indicator_on(lift_state.current_floor);
 
     return;
 }
 
 void lift_state_update(){
-    for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
-        if (hardware_read_floor_sensor(i)){
-            lift_state.current_floor = i;
-        }
-    }
-    return;
+    
+    lift_state.current_floor = elevio_floorSensor();
+
+    
 }
 
 bool lift_state_is_at_floor(){
-    if (lift_state.direction == STATIONARY && lift_state.current_floor != -1){
-        return true;
+    if(elevio_floorSensor != -1 && lift_state.direction == STATIONARY){
+        return 1;
     }
+    else{
+        return 0;
+    }      
+
 }
 
 lift_state_t get_lift_state(){
@@ -56,20 +51,27 @@ lift_state_t get_lift_state(){
 bool set_lift_direction(direction_t direction){
     switch (lift_state.direction)
     {
-    case STATIONARY:
-        /* code */
-        break;
     case MOVEING_UP:
-        //Code
+        if(lift_state.current_floor==N_FLOORS-1){
+            return 0;
+        }
+        else{
+            elevio_motorDirection(DIRN_UP);
+        }
         break;
+
     case MOVEING_DOWN:
-        //code
-        break;
-    case EMERGENCY_STOP:
-        //code
-        break;
+        if(lift_state.current_floor==0){
+            return 0;
+        }
+        else{
+            elevio_motorDirection(DIRN_DOWN);
+        }
+    
     default:
         break;
     }
-    return 0;
+
+
+
 }

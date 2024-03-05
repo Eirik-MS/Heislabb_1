@@ -1,42 +1,57 @@
-#include "hardware.h"
+#include "driver/elevio.h"
+#include "driver/con_load.h"
 #include "door_state.h"
-#include "lift_state.h"
+#include "time.h"
 
 #include <stdio.h>
+
 
 
 static door_state_t door_state;
 
 void door_init(){
     door_state = door_open;
-    hardware_command_door_open(1);
-    if (hardware_read_obstruction_signal()){
+    elevio_doorOpenLamp(1);
+    if (elevio_obstruction()){
         door_state= door_blocked;
     }
     else{
         door_state = door_closed;
-        hardware_command_door_open(0);
+        elevio_doorOpenLamp(0);
     }  
     
 }
 
 void open_door(){
-    if (lift_state_is_at_floor()){
-        hardware_command_door_open(1);
-    }
-    else{
-        printf("cannot open doors. Lift is in undifined state");
-    }
+        elevio_doorOpenLamp(1);
+        door_state = door_open;
+    
 }
-void close_door(){
-    if (!hardware_read_obstruction_signal()){
-        hardware_command_door_open(0);
+int close_door(){
+    if (!elevio_obstruction()){
+        elevio_doorOpenLamp(0);
+        door_state = door_closed;
+        return 1;
     }
     else{
-        printf("cannot close doors. Door blocked");
+        return 0;
     }
+    
 }
 
 door_state_t get_door_state(){
     return door_state;
+}
+
+void door_counter(){
+    clock_t door_time_start= time(NULL);
+    while (time(NULL)-door_time_start<3)
+    {
+        if(elevio_obstruction){
+            door_time_start = time(NULL);
+        }
+    }
+    close_door();
+    
+
 }
