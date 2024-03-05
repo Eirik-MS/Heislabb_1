@@ -6,3 +6,4 @@ void door_init();
 
 void open_door();
 int close_door();
+void door_counter();

@@ -1,6 +1,7 @@
 #include "driver/elevio.h"
 #include "driver/con_load.h"
 #include "door_state.h"
+#include "time.h"
 
 
 
@@ -39,4 +40,17 @@ int close_door(){
 
 door_state_t get_door_state(){
     return door_state;
+}
+
+void door_counter(){
+    clock_t door_time_start= time(NULL);
+    while (time(NULL)-door_time_start<3)
+    {
+        if(elevio_obstruction){
+            door_time_start = time(NULL);
+        }
+    }
+    close_door();
+    
+
 }
