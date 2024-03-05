@@ -1,3 +1,5 @@
+skeleton_project/build/*
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

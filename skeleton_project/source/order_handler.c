@@ -4,9 +4,27 @@
 #include "lift_state.h"
 #include "driver/elevio.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 
-void add_order_to_queue( order_t new){
-    return;
+int queue_size = 0;
+
+order_t * order_queue;
+
+//TODO: Add dynamic memmory
+void add_order_to_queue(order_t new){
+    if (queue_size>0){
+        //Check if identical order exists
+        for(int i= 0; i<queue_size; i++){
+            if(order_queue[i].floor == new.floor &&
+               order_queue[i].button == new.button){
+                return;
+               }
+        }
+    }else{
+        order_queue[0].floor = new.floor;
+        order_queue[0].button = new.button;
+    }
 }
 
 void check_new_order(void){
