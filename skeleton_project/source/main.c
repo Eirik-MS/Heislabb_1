@@ -4,20 +4,23 @@
 #include <time.h>
 #include "driver/elevio.h"
 #include "order_handler.h"
+#include "lift_state.h"
+#include "door_state.h"
 
 
 
 int main(){
     elevio_init();
+    door_init();
+    lift_state_init();
     
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    //door_state_init();
 
     while(1){
         check_new_order();
-        update_floor_state();
+        lift_state_update();
 
 
 

@@ -5,9 +5,11 @@
 #include "driver/elevio.h"
 
 
+void add_order_to_queue( order_t new){
+    return;
+}
 
-
-check_new_order(void){
+void check_new_order(void){
     int btnPressed;
     order_t new;
     for(int f = 0; f < N_FLOORS; f++){

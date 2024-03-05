@@ -1,6 +1,6 @@
 
 #include "lift_state.h"
-#include "elevio.h"
+#include "driver/elevio.h"
 #include <stdbool.h>
 
 static lift_state_t lift_state = {
