@@ -17,3 +17,4 @@ typedef struct lift_state
 
 // Initialize the lift state and corrects for starting between floors
 void lift_state_init();
+void lift_state_update();
