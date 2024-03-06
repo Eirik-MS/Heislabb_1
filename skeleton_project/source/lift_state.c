@@ -33,14 +33,19 @@ void lift_state_init(){
 int lift_state_update(){
     
     lift_state.current_floor = elevio_floorSensor();
+    //printf("===Lift state update===\nCurrent floor: %d\n", lift_state.current_floor);
+    //printf("Last floor: %d\n", lift_state.last_floor);
     if (lift_state.current_floor != lift_state.last_floor){
         if (lift_state.current_floor != -1){
             elevio_floorIndicator(lift_state.current_floor);
+            lift_state.last_floor = lift_state.current_floor;
         }
+        
         return 1;
     }
     if (lift_state.current_floor != -1){
         elevio_floorIndicator(lift_state.current_floor);
+        lift_state.last_floor = lift_state.current_floor;
     }
     return 0;
 }

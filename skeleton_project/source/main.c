@@ -23,11 +23,12 @@ int main(){
         if(lift_state_update()){
             stop_if_order();
         }
+        //printf("=== Example Program ===\n");
 
         handle_movment();
 
         
-
+        door_counter();
         if(elevio_obstruction()){
             elevio_stopLamp(1);
         } else {

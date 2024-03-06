@@ -7,7 +7,9 @@
 
 
 static door_state_t door_state;
-static void door_counter();
+static int Door_time_open;
+static clock_t door_time_start;
+static void door_start_counter();
 
 
 void door_init(){
@@ -26,7 +28,7 @@ void door_init(){
 void open_door(){
         elevio_doorOpenLamp(1);
         door_state = door_open;
-        door_counter();
+        door_start_counter();
         
     
 }
@@ -46,15 +48,19 @@ door_state_t get_door_state(){
     return door_state;
 }
 
-void door_counter(){
-    clock_t door_time_start= time(NULL);
-    while (time(NULL)-door_time_start<3)
-    {
-        if(elevio_obstruction()){
-            door_time_start = time(NULL);
-        }
-    }
-    close_door();
-    
 
+void door_start_counter(){
+    door_time_start = time(NULL);
+
+}
+
+void door_counter(){
+    if (time(NULL) -door_time_start > 3){
+        close_door();
+    }
+    if (elevio_obstruction()){
+        door_state = door_blocked;
+        door_start_counter();
+    }
+  
 }
