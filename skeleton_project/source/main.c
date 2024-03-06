@@ -20,9 +20,11 @@ int main(){
 
     while(1){
         check_new_order();
-        lift_state_update();
+        if(lift_state_update()){
+            stop_if_order();
+        }
 
-
+        handle_movment();
 
         
 
@@ -33,8 +35,7 @@ int main(){
         }
         
         if(elevio_stopButton()){
-            elevio_motorDirection(DIRN_STOP);
-            break;
+            handle_EM_stop();
         }
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);

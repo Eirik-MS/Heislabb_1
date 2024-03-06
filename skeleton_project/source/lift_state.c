@@ -1,13 +1,16 @@
-
+#include "door_state.h"
 #include "lift_state.h"
 #include "driver/elevio.h"
 #include <stdbool.h>
 
-static lift_state_t lift_state = {
+lift_state_t lift_state = {
     .current_floor = -1,
-    .direction = STATIONARY
+    .direction = STATIONARY,
+    .last_floor = -1,
+    .prev_direction = STATIONARY
     //TODO: Emergency stop as own variable?
 };
+
 
 void lift_state_init(){
     if(elevio_floorSensor()==-1){
@@ -27,15 +30,23 @@ void lift_state_init(){
     return;
 }
 
-void lift_state_update(){
+int lift_state_update(){
     
     lift_state.current_floor = elevio_floorSensor();
-
-    
+    if (lift_state.current_floor != lift_state.last_floor){
+        if (lift_state.current_floor != -1){
+            elevio_floorIndicator(lift_state.current_floor);
+        }
+        return 1;
+    }
+    if (lift_state.current_floor != -1){
+        elevio_floorIndicator(lift_state.current_floor);
+    }
+    return 0;
 }
 
 bool lift_state_is_at_floor(){
-    if(elevio_floorSensor != -1 && lift_state.direction == STATIONARY){
+    if(elevio_floorSensor() != -1 && lift_state.direction == STATIONARY){
         return 1;
     }
     else{
@@ -48,30 +59,50 @@ lift_state_t get_lift_state(){
     return lift_state;
 }
 
-bool set_lift_direction(direction_t direction){
-    switch (direction)
-    {
-    case MOVEING_UP:
-        if(lift_state.current_floor==N_FLOORS-1){
-            return 0;
-        }
-        else{
-            elevio_motorDirection(DIRN_UP);
-        }
-        break;
+int set_lift_direction(direction_t direction){
+    if(get_door_state()==door_closed){
+        switch (direction)
+        {
+        case MOVEING_UP:
+            if(lift_state.current_floor==N_FLOORS-1){
+                return 0;
+            }
+            else{
+                lift_state.prev_direction = lift_state.direction;
+                lift_state.direction = MOVEING_UP;
+                elevio_motorDirection(DIRN_UP);
+                return 1;
+            }
+            break;
 
-    case MOVEING_DOWN:
-        if(lift_state.current_floor==0){
-            return 0;
+        case MOVEING_DOWN:
+            if(lift_state.current_floor==0){
+                return 0;
+            }
+            else{
+                lift_state.prev_direction = lift_state.direction;
+                lift_state.direction = MOVEING_DOWN;
+                elevio_motorDirection(DIRN_DOWN);
+                return 1;
+            }
+            break;
+
+        case STATIONARY:
+            lift_state.prev_direction = lift_state.direction;
+            lift_state.direction = STATIONARY;
+            elevio_motorDirection(DIRN_STOP);
+            return 1;
+            break;
+
+        case EMERGENCY_STOP:
+            lift_state.prev_direction = lift_state.direction;
+            lift_state.direction = EMERGENCY_STOP;
+            elevio_motorDirection(DIRN_STOP);
+            return 1;
+            break;
         }
-        else{
-            elevio_motorDirection(DIRN_DOWN);
-        }
-    
-    default:
-        break;
+    } else {
+        return 0;
     }
-
-
-
+    return 0;
 }
