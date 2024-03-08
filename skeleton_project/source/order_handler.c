@@ -52,12 +52,18 @@ void handle_movment(){
         //Handle stop from EM
         if (lift_state.current_floor == -1){
             printf("EMERGENCY: Last Floor: %d", lift_state.last_floor);
-            if (order_queue[0].floor > lift_state.last_floor && 
-                lift_state.prev_direction == MOVEING_UP){
+            if (order_queue[0].floor > lift_state.last_floor){
                 set_lift_direction(MOVEING_UP);
-            } else {
+            } else if(order_queue[0].floor < lift_state.last_floor) {
 
                 set_lift_direction(MOVEING_DOWN);
+                
+            } else if (order_queue[0].floor == lift_state.last_floor){
+                if (lift_state.prev_direction == MOVEING_DOWN){
+                    set_lift_direction(MOVEING_UP);
+                } else {
+                    set_lift_direction(MOVEING_DOWN);
+                }
             }
         } else {
             printf("EMERGENCY: Last Floor: %d", lift_state.last_floor);
@@ -149,12 +155,12 @@ void stop_if_order(){
                         if(order_queue[i].floor==lift_state.current_floor){
                             elevio_buttonLamp(order_queue[i].floor, order_queue[i].button, 0);
                             remove_order(i);
+                        }
                     }
-                }
                 } else if (order_queue[0].floor ==lift_state.current_floor){
                     set_lift_direction(STATIONARY);
                     open_door();
-                    elevio_buttonLamp(order_queue[i].floor, BUTTON_HALL_DOWN, 0);
+                    elevio_buttonLamp(order_queue[i].floor, BUTTON_HALL_UP, 0);
                     remove_order(i);
                     for(int i=0; i<queue_size; i++){
                         if(order_queue[i].floor==lift_state.current_floor){
