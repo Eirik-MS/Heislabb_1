@@ -152,6 +152,17 @@ void stop_if_order(){
                             remove_order(i);
                     }
                 }
+                } else if (order_queue[0].floor ==lift_state.current_floor){
+                    set_lift_direction(STATIONARY);
+                    open_door();
+                    elevio_buttonLamp(order_queue[i].floor, BUTTON_HALL_DOWN, 0);
+                    remove_order(i);
+                    for(int i=0; i<queue_size; i++){
+                        if(order_queue[i].floor==lift_state.current_floor){
+                            elevio_buttonLamp(order_queue[i].floor, order_queue[i].button, 0);
+                            remove_order(i);
+                        }
+                    }
                 }
                 break;
         
