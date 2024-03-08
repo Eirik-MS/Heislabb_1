@@ -52,7 +52,7 @@ int lift_state_update(){
     if (lift_state.current_floor != -1){
         elevio_floorIndicator(lift_state.current_floor);
         lift_state.last_floor = lift_state.current_floor;
-        return 1;
+        //return 1;
     }
     return 0;
 }
