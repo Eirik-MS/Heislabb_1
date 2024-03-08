@@ -32,7 +32,7 @@ void add_order_to_queue(order_t new){
     }else{
         order_queue[0].floor = new.floor;
         order_queue[0].button = new.button;
-        queue_size ++;
+        queue_size++;
     }
 }
 

@@ -20,9 +20,8 @@ int main(){
 
     while(1){
         check_new_order();
-        if(lift_state_update()){
-            stop_if_order();
-        }
+        lift_state_update();
+        stop_if_order();
         //printf("=== Example Program ===\n");
 
         handle_movment();
