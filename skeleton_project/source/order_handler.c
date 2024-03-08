@@ -73,7 +73,6 @@ void handle_movment(){
 
 
 void check_new_order(void){
-    int btnPressed;
     order_t new;
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
