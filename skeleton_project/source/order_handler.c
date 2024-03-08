@@ -101,6 +101,7 @@ void stop_if_order(){
                 open_door();
                 elevio_buttonLamp(order_queue[i].floor, BUTTON_CAB, 0);
                 remove_order(i);
+                i--;
                 break;
 
             case BUTTON_HALL_DOWN:
@@ -109,6 +110,7 @@ void stop_if_order(){
                     open_door();
                     elevio_buttonLamp(order_queue[i].floor, BUTTON_HALL_DOWN, 0);
                     remove_order(i);
+                    i--;
                 }
                 break;
 
@@ -123,6 +125,7 @@ void stop_if_order(){
                     open_door();
                     elevio_buttonLamp(order_queue[i].floor, BUTTON_HALL_UP, 0);
                     remove_order(i);
+                    i--;
                 }
                 break;
         
