@@ -159,4 +159,7 @@ void handle_EM_stop(){
         order_queue[i].floor = -1;
     }
     queue_size = 0;
+    if (lift_state.current_floor != -1){
+        open_door();
+    }
 }
