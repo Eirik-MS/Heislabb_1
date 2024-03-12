@@ -13,6 +13,12 @@ lift_state_t lift_state = {
 
 
 void lift_state_init(){
+    for (int i = 0; i< N_FLOORS; i++){
+        for (int j =0; j<N_BUTTONS;j++){
+            elevio_buttonLamp(i, j, 0);
+        }
+    }
+
     if(elevio_floorSensor()==-1){
         while (elevio_floorSensor()==-1)
         {
@@ -46,6 +52,7 @@ int lift_state_update(){
     if (lift_state.current_floor != -1){
         elevio_floorIndicator(lift_state.current_floor);
         lift_state.last_floor = lift_state.current_floor;
+        //return 1;
     }
     return 0;
 }
@@ -107,7 +114,24 @@ int set_lift_direction(direction_t direction){
             break;
         }
     } else {
-        return 0;
+        switch (direction)
+        {
+        case STATIONARY:
+            lift_state.prev_direction = lift_state.direction;
+            lift_state.direction = STATIONARY;
+            elevio_motorDirection(DIRN_STOP);
+            return 1;
+            break;
+
+        case EMERGENCY_STOP:
+            lift_state.prev_direction = lift_state.direction;
+            lift_state.direction = EMERGENCY_STOP;
+            elevio_motorDirection(DIRN_STOP);
+            return 1;
+            break;
+        default:
+            return 0;
+        }
     }
     return 0;
 }
