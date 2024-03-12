@@ -14,8 +14,8 @@ int main(){
     door_init();
     lift_state_init();
     
-    printf("=== Example Program ===\n");
-    printf("Press the stop button on the elevator panel to exit\n");
+    printf("=== Eirik og Linn sin Heis ===\n");
+    printf("Yabbadabadooooo\n");
 
 
     while(1){
@@ -23,12 +23,11 @@ int main(){
         if(lift_state_update()){
             stop_if_order();
         }
-        //printf("=== Example Program ===\n");
 
         handle_movment();
 
-        
         door_counter();
+
         if(elevio_obstruction()){
             elevio_stopLamp(1);
         } else {

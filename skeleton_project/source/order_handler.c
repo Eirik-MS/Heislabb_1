@@ -77,8 +77,6 @@ void check_new_order(void){
     order_t new;
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
-            //btnPressed = elevio_callButton(f, b);
-            //elevio_buttonLamp(f, b, btnPressed);
             if(elevio_callButton(f, b)){
                 elevio_buttonLamp(f, b, 1);
                 new.button = b;
